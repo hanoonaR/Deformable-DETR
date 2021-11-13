@@ -167,3 +167,13 @@ You can get the config file and pretrained model of Deformable DETR (the link is
 ```
 
 You can also run distributed evaluation by using ```./tools/run_dist_launch.sh``` or ```./tools/run_dist_slurm.sh```.
+
+
+### Class-agnostic training and evaluation on MDETR pretraining data
+You can use the [config](./configs/r50_deformable_detr_mdetr.sh) file corresponding to the class agnostic training on MDETR pretraining data. 
+The data must follow the same pattern as coco, described above.
+
+For evaluation, you can use:
+```bash
+./configs/r50_deformable_detr_mdetr.sh --resume <path to pre-trained model> --eval
+```
