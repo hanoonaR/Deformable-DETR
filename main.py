@@ -122,7 +122,14 @@ def get_args_parser():
     parser.add_argument('--eval', action='store_true')
     parser.add_argument('--num_workers', default=2, type=int)
     parser.add_argument('--cache_mode', default=False, action='store_true', help='whether to cache images on memory')
-
+    # Arguments for class agnostic training and language ablation
+    parser.add_argument('--random_group', default=False, help='whether to randomly group data to mimic '
+                                                              'combinations of instances occurring in captioned '
+                                                              'image (Setting:3, 4)')
+    parser.add_argument('--train_set', default='train', type=str,
+                        help="Name of training set to use. Default coco uses 'train', Language structure on mdetr "
+                             "pretraining data with Setting1: 'train_combined',"
+                             " Setting2: 'train_combined_nms', Setting3/4: 'train'")
     return parser
 
 
@@ -149,7 +156,8 @@ def main(args):
     n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print('number of params:', n_parameters)
 
-    dataset_train = build_dataset(image_set='train', args=args)
+    training_set = args.train_set
+    dataset_train = build_dataset(image_set=training_set, args=args)
     dataset_val = build_dataset(image_set='val', args=args)
 
     if args.distributed:
