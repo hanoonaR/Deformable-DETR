@@ -21,25 +21,6 @@ def _make_deformable_detr(backbone_name: str, dilation=False, num_classes=91):
 
 def deformable_detr_resnet101(pretrained=False, return_postprocessor=False, checkpoints_path=""):
     """
-    Deformable DETR R50 with 6 encoder and 6 decoder layers.
-    """
-    num_classes = 91
-    model = _make_deformable_detr("resnet50", dilation=False, num_classes=num_classes)
-    if pretrained:
-        checkpoint = torch.hub.load_state_dict_from_url(
-            url="", map_location="cpu", check_hash=True
-        )
-        model.load_state_dict(checkpoint["model"])
-    elif checkpoints_path:
-        checkpoint = torch.load(checkpoints_path, map_location="cpu")
-        model.load_state_dict(checkpoint["model"])
-    if return_postprocessor:
-        return model, PostProcess()
-    return model
-
-
-def deformable_detr_resnet101(pretrained=False, return_postprocessor=False, checkpoints_path=""):
-    """
     Deformable DETR R101 with 6 encoder and 6 decoder layers.
     """
     num_classes = 91

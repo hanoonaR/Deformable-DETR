@@ -168,7 +168,7 @@ def build(image_set, args):
         "train": (root / "train2017", root / "annotations" / f'{mode}_train2017.json'),
         "val": (root / "val2017", root / "annotations" / f'{mode}_val2017.json'),
         "train_combined": (root / "train2017", root / "annotations" / f'{mode}_train_combined.json'),
-        "train_combined_nms": (root / "train2017", root / "annotations" / f'{mode}_train_combined.json')
+        "train_combined_nms": (root / "train2017", root / "annotations" / f'{mode}_train_combined_nms.json')
     }
 
     img_folder, ann_file = PATHS[image_set]

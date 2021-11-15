@@ -129,7 +129,7 @@ def get_args_parser():
     parser.add_argument('--train_set', default='train', type=str,
                         help="Name of training set to use. Default coco uses 'train', Language structure on mdetr "
                              "pretraining data with Setting1: 'train_combined',"
-                             " Setting2: 'train_combined_nms', Setting3/4: 'train'")
+                             " Setting2: 'train_combined_nms', Setting3/4: 'train_combined'")
     return parser
 
 

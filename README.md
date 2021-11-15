@@ -196,9 +196,9 @@ GPUS_PER_NODE=8 ./tools/run_dist_launch.sh 8 ./configs/r101_deformable_detr_mdet
 ```
 3. Setting 3: Random grouping
 ```bash
-GPUS_PER_NODE=8 ./tools/run_dist_launch.sh 8 ./configs/r101_deformable_detr_mdetr.sh --train_set train --random_group True
+GPUS_PER_NODE=8 ./tools/run_dist_launch.sh 8 ./configs/r101_deformable_detr_mdetr.sh --train_set train_combined --random_group True
 ```
 4. Setting 4: Random grouping and longer iterations
 ```bash
-GPUS_PER_NODE=8 ./tools/run_dist_launch.sh 8 ./configs/r101_deformable_detr_mdetr.sh --train_set train --random_group True --epochs 110
+GPUS_PER_NODE=8 ./tools/run_dist_launch.sh 8 ./configs/r101_deformable_detr_mdetr.sh --train_set train_combined --random_group True --epochs 110
 ```
