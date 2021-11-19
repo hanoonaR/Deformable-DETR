@@ -167,3 +167,38 @@ You can get the config file and pretrained model of Deformable DETR (the link is
 ```
 
 You can also run distributed evaluation by using ```./tools/run_dist_launch.sh``` or ```./tools/run_dist_slurm.sh```.
+
+
+### Class-agnostic training and evaluation on MDETR pretraining data
+You can use the [config](./configs/r101_deformable_detr_mdetr.sh) file corresponding to the class agnostic training on MDETR pretraining data.
+The data must follow the same pattern as coco, described above.
+
+For example, the command for training on 8 GPUs is as following:
+```bash
+GPUS_PER_NODE=8 ./tools/run_dist_launch.sh 8 ./configs/r101_deformable_detr_mdetr.sh
+```
+
+For evaluation, you can use:
+```bash
+./configs/r101_deformable_detr_mdetr.sh --resume <path to pre-trained model> --eval
+```
+
+### Language Structure (Ablation) Trainings
+
+The  commands for training the different settings for conducting language structure ablations is as following [Section 4.2]:
+1. Setting 1: Combined Annotations
+```bash
+GPUS_PER_NODE=8 ./tools/run_dist_launch.sh 8 ./configs/r101_deformable_detr_mdetr.sh --train_set train_combined
+```
+2. Setting 2: Combined Annotations with NMS
+```bash
+GPUS_PER_NODE=8 ./tools/run_dist_launch.sh 8 ./configs/r101_deformable_detr_mdetr.sh --train_set train_combined_nms
+```
+3. Setting 3: Random grouping
+```bash
+GPUS_PER_NODE=8 ./tools/run_dist_launch.sh 8 ./configs/r101_deformable_detr_mdetr.sh --train_set train_combined --random_group True
+```
+4. Setting 4: Random grouping and longer iterations
+```bash
+GPUS_PER_NODE=8 ./tools/run_dist_launch.sh 8 ./configs/r101_deformable_detr_mdetr.sh --train_set train_combined --random_group True --epochs 110
+```

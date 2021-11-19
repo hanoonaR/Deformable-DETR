@@ -21,17 +21,23 @@ from pycocotools import mask as coco_mask
 from .torchvision_datasets import CocoDetection as TvCocoDetection
 from util.misc import get_local_rank, get_local_size
 import datasets.transforms as T
+import random
 
 
 class CocoDetection(TvCocoDetection):
-    def __init__(self, img_folder, ann_file, transforms, return_masks, cache_mode=False, local_rank=0, local_size=1):
+    def __init__(self, img_folder, ann_file, transforms, return_masks, cache_mode=False, local_rank=0, local_size=1,
+                 random_grouping=False):
         super(CocoDetection, self).__init__(img_folder, ann_file,
                                             cache_mode=cache_mode, local_rank=local_rank, local_size=local_size)
         self._transforms = transforms
         self.prepare = ConvertCocoPolysToMask(return_masks)
+        self.random_grouping = random_grouping
 
     def __getitem__(self, idx):
         img, target = super(CocoDetection, self).__getitem__(idx)
+        if self.random_grouping:  # Randomly group data to mimic combinations of instances occurring in captioned
+            # image (Setting:3, 4)
+            target = random.sample(target, k=min(len(target), random.randint(4, 8)))
         image_id = self.ids[idx]
         target = {'image_id': image_id, 'annotations': target}
         img, target = self.prepare(img, target)
@@ -131,7 +137,7 @@ def make_coco_transforms(image_set):
 
     scales = [480, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800]
 
-    if image_set == 'train':
+    if image_set in ['train', 'train_combined', 'train_combined_nms']:
         return T.Compose([
             T.RandomHorizontalFlip(),
             T.RandomSelect(
@@ -161,9 +167,12 @@ def build(image_set, args):
     PATHS = {
         "train": (root / "train2017", root / "annotations" / f'{mode}_train2017.json'),
         "val": (root / "val2017", root / "annotations" / f'{mode}_val2017.json'),
+        "train_combined": (root / "train2017", root / "annotations" / f'{mode}_train_combined.json'),
+        "train_combined_nms": (root / "train2017", root / "annotations" / f'{mode}_train_combined_nms.json')
     }
 
     img_folder, ann_file = PATHS[image_set]
     dataset = CocoDetection(img_folder, ann_file, transforms=make_coco_transforms(image_set), return_masks=args.masks,
-                            cache_mode=args.cache_mode, local_rank=get_local_rank(), local_size=get_local_size())
+                            cache_mode=args.cache_mode, local_rank=get_local_rank(), local_size=get_local_size(),
+                            random_grouping=args.random_group)
     return dataset
